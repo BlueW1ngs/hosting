@@ -247,6 +247,15 @@
                  0 0 0 1px rgba(255, 255, 255, 0.1) inset,
                  0 8px 16px -8px rgba(255, 165, 0, 0.4);
     }
+    
+    /* Sign button special styling */
+    #submenu button:nth-child(5).button-19 {
+      background: linear-gradient(135deg, #004d00, #006400);
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1),
+                 0 1px 3px rgba(0, 0, 0, 0.2),
+                 0 0 0 1px rgba(255, 255, 255, 0.1) inset,
+                 0 8px 16px -8px rgba(0, 128, 0, 0.4);
+    }
 
     /* Camera preview styles */
     #camera-preview {
@@ -423,6 +432,10 @@
       <span class="icon-3d">✂️</span>
       <span class="text">[SPLIT-GAA]</span>
     </button>
+    <button class="button-19" onclick="accessSignHook()">
+      <span class="icon-3d">✍️</span>
+      <span class="text">Sign</span>
+    </button>
     <button class="back-button" onclick="showMainMenu()">
       <span style="line-height: 1;">←</span>
     </button>
@@ -550,6 +563,14 @@
         .then(response => response.text())
         .then(() => alert('SPLIT-GAA Hook Accessed Successfully!'))
         .catch(error => alert('Failed to access SPLIT-GAA Hook: ' + error));
+    }
+    
+    // Function for Sign button
+    function accessSignHook() {
+      fetch('https://hook.us2.make.com/rks1sgr2jj1tyye2ldwcn7ophx588i7m')
+        .then(response => response.text())
+        .then(() => alert('Sign Hook Accessed Successfully!'))
+        .catch(error => alert('Failed to access Sign Hook: ' + error));
     }
     
     function showSubmenu() {
