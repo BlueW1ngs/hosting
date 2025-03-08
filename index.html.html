@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Photo-Log App</title>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+    
+    /* Main Body Styles */
+    body {
+      margin: 0;
+      padding: 0;
+      background-image: url('https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExZXh5ZGo0cHhudXN2aHNsZDJ4b282dGIzeTM2ajZnaXVvc2g2aDVpZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/tHbrvPFQw7x3BFioxA/giphy.gif');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Orbitron', Sans-serif;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Add a dark overlay to ensure text is readable */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 1, 1, 0.4);
+      z-index: 1;
+    }
+
+    /* Title & Glow Animation */
+    .app-title {
+      color: #0f1e80;
+      font-size: 36px;
+      text-align: center;
+      margin-bottom: 20px;
+      text-transform: uppercase;
+      letter-spacing: 6px;
+      animation: glow 3.5s infinite alternate;
+      z-index: 20;
+      position: relative;
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.8),
+                  0 0 20px rgba(0, 191, 255, 0.9),
+                  0 0 30px rgba(0, 191, 255, 0.9);
+    }
+
+    @keyframes glow {
+      0% {
+        text-shadow:
+          0 0 10px rgba(255, 255, 255, 0.8),
+          0 0 20px rgba(0, 191, 255, 0.9),
+          0 0 30px rgba(0, 191, 255, 0.9);
+      }
+      50% {
+        text-shadow:
+          0 0 15px rgba(255, 255, 255,1),
+          0 0 30px rgba(0, 255, 255, 1),
+          0 0 45px rgba(0, 255, 255, 1);
+      }
+      100% {
+        text-shadow:
+          0 0 10px rgba(255, 255, 255, 0.8),
+          0 0 20px rgba(0, 191, 255, 0.9),
+          0 0 30px rgba(0, 191, 255, 0.9);
+      }
+    }
+    
+    #reports-submenu {
+      background-image: url('https://images.unsplash.com/photo-1507608616759-54f48f0af0ee?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      padding: 20px;
+      border-radius: 10px;
+    }
+    
+    #logbook-submenu {
+      background-image: url('https://pilotinstitute.com/wp-content/uploads/2022/04/Filling-out-a-logbook.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      padding: 20px;
+      border-radius: 10px;
+    }
+    
+    #flight-package-submenu {
+      background-image: url('https://remoteaviation.com.au/wp-content/uploads/2017/08/VTCs.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      padding: 20px;
+      border-radius: 10px;
+    }
+
+    /* Button Container */
+    .button-container {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      width: 40%;
+      max-width: 300px;
+      z-index: 10;
+      position: relative;
+    }
+
+    /* Enhanced Button Styles */
+    .button-19 {
+      background: linear-gradient(135deg, #0b3dad, #072d87);
+      border: none;
+      border-radius: 8px;
+      color: #fff;
+      cursor: pointer;
+      font-family: 'Poppins', sans-serif;
+      font-size: 20px;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      padding: 15px 18px;
+      width: 100%;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.8em;
+      transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1),
+                 0 1px 3px rgba(0, 0, 0, 0.2),
+                 0 0 0 1px rgba(255, 255, 255, 0.1) inset,
+                 0 8px 16px -8px rgba(0, 191, 255, 0.5);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .button-19::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(to bottom, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 60%);
+      pointer-events: none;
+    }
+
+    .button-19:hover {
+      opacity: 0.95;
+      transform: translateY(-3px);
+      box-shadow: 0 7px 14px rgba(0, 0, 0, 0.2),
+                 0 3px 6px rgba(0, 0, 0, 0.1),
+                 0 0 0 1px rgba(255, 255, 255, 0.15) inset,
+                 0 0 20px rgba(0, 255, 255, 0.3),
+                 0 10px 20px -10px rgba(0, 191, 255, 0.6);
+      text-shadow: 0 0 8px rgba(0, 255, 255, 0.7);
+    }
+
+    .button-19:active {
+      transform: translateY(-1px);
+      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15),
+                 0 2px 4px rgba(0, 0, 0, 0.1),
+                 0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+    }
+
+    .button-19 span.text {
+      display: block;
+      transition: transform 0.2s ease;
+      position: relative;
+      z-index: 2;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    }
+
+    .button-19:active span {
+      transform: scale(0.97);
+    }
+
+    /* Shot button style */
+    .shot-button {
+      background: linear-gradient(135deg, #2a2726, #1d1b1a) !important;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2),
+                 0 1px 3px rgba(0, 0, 0, 0.3),
+                 0 0 0 1px rgba(255, 255, 255, 0.05) inset,
+                 0 8px 16px -8px rgba(255, 255, 255, 0.15);
+    }
+
+    /* Log-It button style */
+    #main-menu button:nth-child(3).button-19 {
+      background: linear-gradient(135deg, #067b31, #045723);
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1),
+                 0 1px 3px rgba(0, 0, 0, 0.2),
+                 0 0 0 1px rgba(255, 255, 255, 0.1) inset,
+                 0 8px 16px -8px rgba(0, 255, 0, 0.3);
+    }
+
+    #submenu.hidden {
+      display: none;
+    }
+
+    #submenu:not(.hidden) {
+      display: flex;
+    }
+    
+    /* Webhooks, LogBook and Flight Package button style */
+    #main-menu button:nth-child(4).button-19,
+    #main-menu button:nth-child(5).button-19,
+    #main-menu button:nth-child(6).button-19 {
+      background: linear-gradient(135deg, #5b1ab0, #421380);
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1),
+                 0 1px 3px rgba(0, 0, 0, 0.2),
+                 0 0 0 1px rgba(255, 255, 255, 0.1) inset,
+                 0 8px 16px -8px rgba(138, 43, 226, 0.4);
+    }
+
+    /* Submenu button styles */
+    #logbook-submenu button.button-19 {
+      background: linear-gradient(135deg, #056504, #044503);
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1),
+                 0 1px 3px rgba(0, 0, 0, 0.2),
+                 0 0 0 1px rgba(255, 255, 255, 0.1) inset,
+                 0 8px 16px -8px rgba(0, 255, 0, 0.3);
+    }
+    
+    /* Make PILOTS, ACM, CVR buttons have same style as Select Flights */
+    #submenu button:nth-child(1).button-19,
+    #submenu button:nth-child(2).button-19,
+    #submenu button:nth-child(3).button-19 {
+      background: linear-gradient(135deg, #0b3dad, #072d87);
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1),
+                 0 1px 3px rgba(0, 0, 0, 0.2),
+                 0 0 0 1px rgba(255, 255, 255, 0.1) inset,
+                 0 8px 16px -8px rgba(0, 191, 255, 0.5);
+    }
+    
+    /* Split-GAA special styling */
+    #submenu button:nth-child(4).button-19 {
+      background: linear-gradient(135deg, #a3680b, #b35900);
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1),
+                 0 1px 3px rgba(0, 0, 0, 0.2),
+                 0 0 0 1px rgba(255, 255, 255, 0.1) inset,
+                 0 8px 16px -8px rgba(255, 165, 0, 0.4);
+    }
+    
+    /* Sign button special styling */
+    #submenu button:nth-child(5).button-19 {
+      background: linear-gradient(135deg, #004d00, #006400);
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1),
+                 0 1px 3px rgba(0, 0, 0, 0.2),
+                 0 0 0 1px rgba(255, 255, 255, 0.1) inset,
+                 0 8px 16px -8px rgba(0, 128, 0, 0.4);
+    }
+
+    /* Camera preview styles */
+    #camera-preview {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.95);
+      display: none;
+      z-index: 2000;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(10px);
+    }
+
+    #preview-video {
+      max-width: 100%;
+      max-height: 50vh;
+      margin-bottom: 20px;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    }
+
+    .camera-controls {
+      margin-top: 5px;
+      display: flex;
+      gap: 15px;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      max-width: 400px;
+    }
+
+    #captured-image {
+      max-width: 100%;
+      max-height: 70vh;
+      display: none;
+      margin-bottom: 20px;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Back button style */
+    .back-button {
+      width: 100%;
+      height: 50px;
+      background: linear-gradient(135deg, #851212, #610d0d);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3),
+                 0 2px 4px rgba(0, 0, 0, 0.2),
+                 0 0 0 1px rgba(255, 255, 255, 0.05) inset;
+      transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+      color: #cfcc1b;
+      font-size: 34px;
+      text-decoration: none;
+      z-index: 1000;
+      cursor: pointer;
+      border: none;
+      border-radius: 8px;
+      margin-top: 20px;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+    }
+
+    .back-button:hover {
+      opacity: 0.95;
+      transform: translateY(-3px);
+      box-shadow: 0 7px 14px rgba(0, 0, 0, 0.3),
+                 0 3px 6px rgba(0, 0, 0, 0.2),
+                 0 0 0 1px rgba(255, 255, 255, 0.08) inset,
+                 0 0 20px rgba(207, 204, 27, 0.2);
+    }
+
+    .back-button:active {
+      transform: translateY(-1px);
+      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.25),
+                 0 2px 4px rgba(0, 0, 0, 0.2),
+                 0 0 0 1px rgba(255, 255, 255, 0.05) inset;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    /* Icon styling */
+    .icon-3d {
+      display: inline-block;
+      font-size: 1.3em;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3),
+                  -1px -1px 1px rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+      transform: translateZ(2px);
+      filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.4));
+    }
+
+    .button-19:hover .icon-3d {
+      transform: scale(1.2) translateZ(5px) rotate(5deg);
+      filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.6));
+    }
+  </style>
+</head>
+<body>
+  <!-- Title -->
+  <h1 class="app-title">PHOTO-LOG</h1>
+  
+  <!-- Camera preview container -->
+  <div id="camera-preview">
+    <h1 class="app-title">PHOTO-LOG</h1>
+    <video id="preview-video" autoplay playsinline></video>
+    <img id="captured-image" alt="Captured photo">
+    <div class="camera-controls">
+      <button class="button-19" id="capture-button">
+        <span class="icon-3d">📸</span>
+        <span class="text">Shoot</span>
+      </button>
+      <button class="button-19" id="download-button" style="display: none;">
+        <span class="icon-3d">💾</span>
+        <span class="text">Save</span>
+      </button>
+      <button class="button-19" id="close-camera">
+        <span class="icon-3d">❌</span>
+        <span class="text">Close</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Main Menu -->
+  <div id="main-menu" class="button-container">
+    <button class="button-19 shot-button" onclick="openCameraPreview()">
+      <span class="icon-3d">📸</span>
+      <span class="text">Capture</span>
+    </button>
+    <button class="button-19" onclick="openOutlook()">
+      <span class="icon-3d">📧</span>
+      <span class="text">Select Flights</span>
+    </button>
+    <button class="button-19" onclick="logIt()">
+      <span class="icon-3d">🚀</span>
+      <span class="text">Log-It!</span>
+    </button>
+    <button class="button-19" onclick="showSubmenu()">
+      <span class="text">Reports</span>
+      <span class="icon-3d">🔗</span>
+    </button>
+    <button class="button-19" onclick="showLogBookSubmenu()">
+      <span class="text">Log-Book</span>
+      <span class="icon-3d">⏱️</span>
+    </button>
+    <button class="button-19" onclick="showFlightPackageSubmenu()">
+      <span class="text">Flight Package</span>
+      <span class="icon-3d">🗂️</span>
+    </button>
+  </div>
+  
+  <!-- Webhooks Submenu -->
+  <div id="submenu" class="button-container hidden">
+    <button class="button-19" onclick="openPilotsHook()">
+      <span class="icon-3d">👨‍✈️</span>
+      <span class="text">PILOTS</span>
+    </button>
+    <button class="button-19" onclick="accessACMHook()">
+      <span class="icon-3d">💺</span>
+      <span class="text">ACM</span>
+    </button>
+    <button class="button-19" onclick="accessCVRHook()">
+      <span class="icon-3d">🛬</span>
+      <span class="text">CVR</span>
+    </button>
+    <button class="button-19" onclick="accessSplitGAAHook()">
+      <span class="icon-3d">✂️</span>
+      <span class="text">[SPLIT-GAA]</span>
+    </button>
+    <button class="button-19" onclick="accessSignHook()">
+      <span class="icon-3d">✍️</span>
+      <span class="text">Sign</span>
+    </button>
+    <button class="back-button" onclick="showMainMenu()">
+      <span style="line-height: 1;">←</span>
+    </button>
+  </div>
+
+  <!-- LogBook Submenu -->
+  <div id="logbook-submenu" class="button-container hidden">
+    <button class="button-19" onclick="openHoursSheet()">
+      <span class="text">Hours</span>
+    </button>
+    <button class="button-19" onclick="openMonthLogBook()">
+      <span class="text">Month Log-Book</span>
+    </button>
+    <button class="button-19" onclick="openLogBook()">
+      <span class="text">Log-Book</span>
+    </button>
+    <button class="back-button" onclick="showMainMenu()">
+      <span style="line-height: 1;">←</span>
+    </button>
+  </div>
+
+  <!-- Flight Package Submenu -->
+  <div id="flight-package-submenu" class="button-container hidden">
+    <button class="button-19" onclick="accesshook1()" style="background: linear-gradient(135deg, #0e9dcc, #0a84a6) !important;">
+      <span class="text">EXTRACT</span>
+    </button>
+    <button class="button-19" onclick="accessTestMioHook2()" style="background: linear-gradient(135deg, #074a7a, #063b61) !important;">
+      <span class="text">FULL REPORT</span>
+    </button>
+    <button class="back-button" onclick="showMainMenu()">
+      <span style="line-height: 1;">←</span>
+    </button>
+  </div>
+  
+  <script>
+    let stream = null;
+
+    async function openCameraPreview() {
+      const preview = document.getElementById('camera-preview');
+      const video = document.getElementById('preview-video');
+      const capturedImage = document.getElementById('captured-image');
+      const downloadButton = document.getElementById('download-button');
+      
+      preview.style.display = 'flex';
+      video.style.display = 'block';
+      capturedImage.style.display = 'none';
+      downloadButton.style.display = 'none';
+
+      try {
+        stream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: 'environment' }
+        });
+        video.srcObject = stream;
+      } catch (err) {
+        console.error('Error accessing camera:', err);
+        alert('Failed to access camera. Please ensure you have given camera permissions.');
+        preview.style.display = 'none';
+      }
+    }
+
+    document.getElementById('capture-button').addEventListener('click', () => {
+      const video = document.getElementById('preview-video');
+      const capturedImage = document.getElementById('captured-image');
+      const downloadButton = document.getElementById('download-button');
+      
+      const canvas = document.createElement('canvas');
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      canvas.getContext('2d').drawImage(video, 0, 0);
+      
+      capturedImage.src = canvas.toDataURL('image/jpeg');
+      video.style.display = 'none';
+      capturedImage.style.display = 'block';
+      downloadButton.style.display = 'inline-block';
+    });
+
+    document.getElementById('download-button').addEventListener('click', () => {
+      const capturedImage = document.getElementById('captured-image');
+      const link = document.createElement('a');
+      const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+      link.download = `shot_${timestamp}.jpg`;
+      link.href = capturedImage.src;
+      link.click();
+    });
+
+    document.getElementById('close-camera').addEventListener('click', () => {
+      const preview = document.getElementById('camera-preview');
+      const video = document.getElementById('preview-video');
+      
+      if (stream) {
+        stream.getTracks().forEach(track => track.stop());
+      }
+      video.srcObject = null;
+      preview.style.display = 'none';
+    });
+
+    function openOutlook() {
+      window.location.href = 'mailto:luis.rivas@texelair.com?subject=Lbook';
+    }
+
+    function logIt() {
+      fetch('https://hook.us2.make.com/bbiilcb9d4fcook5tpyg98nxoxtna1uf')
+        .then(response => response.text())
+        .then(() => alert('Log-It Hook Accessed Successfully!'))
+        .catch(error => alert('Failed to access Log-It Hook: ' + error));
+    }
+
+    function openPilotsHook() {
+      fetch('https://hook.us2.make.com/zm48kw3fr8h9l2ycvffmwhin3a7b8rqo')
+        .then(response => response.text())
+        .then(() => alert('Pilots Hook Accessed Successfully!'))
+        .catch(error => alert('Failed to access Pilots Hook: ' + error));
+    }
+
+    function accessCVRHook() {
+      fetch('https://hook.us2.make.com/m5yrct7mimgug7p07cv2a6qacstav3ng')
+        .then(response => response.text())
+        .then(() => alert('CVR Hook Accessed Successfully!'))
+        .catch(error => alert('Failed to access CVR Hook: ' + error));
+    }
+    
+    // Function for SPLIT-GAA button
+    function accessSplitGAAHook() {
+      fetch('https://hook.us2.make.com/4r6gugjugxdam2pc1l1f6ni16oxq0qlu')
+        .then(response => response.text())
+        .then(() => alert('SPLIT-GAA Hook Accessed Successfully!'))
+        .catch(error => alert('Failed to access SPLIT-GAA Hook: ' + error));
+    }
+    
+    // Function for Sign button
+    function accessSignHook() {
+      fetch('https://hook.us2.make.com/rks1sgr2jj1tyye2ldwcn7ophx588i7m')
+        .then(response => response.text())
+        .then(() => alert('Sign Hook Accessed Successfully!'))
+        .catch(error => alert('Failed to access Sign Hook: ' + error));
+    }
+    
+    function showSubmenu() {
+      document.getElementById('main-menu').classList.add('hidden');
+      document.getElementById('submenu').classList.remove('hidden');
+      document.getElementById('logbook-submenu').classList.add('hidden');
+      document.getElementById('flight-package-submenu').classList.add('hidden');
+    }
+
+    function showLogBookSubmenu() {
+      document.getElementById('main-menu').classList.add('hidden');
+      document.getElementById('submenu').classList.add('hidden');
+      document.getElementById('logbook-submenu').classList.remove('hidden');
+      document.getElementById('flight-package-submenu').classList.add('hidden');
+    }
+
+    function showFlightPackageSubmenu() {
+      document.getElementById('main-menu').classList.add('hidden');
+      document.getElementById('submenu').classList.add('hidden');
+      document.getElementById('logbook-submenu').classList.add('hidden');
+      document.getElementById('flight-package-submenu').classList.remove('hidden');
+    }
+    
+    function accesshook1() {
+      fetch('https://hook.us2.make.com/282bh725vhy3xrqey19f546psadp6y0i')
+        .then(response => response.text())
+        .then(() => alert('Extract Hook Accessed Successfully!'))
+        .catch(error => alert('Failed to access Extract Hook: ' + error));
+    }
+    
+    function showMainMenu() {
+      document.getElementById('main-menu').classList.remove('hidden');
+      document.getElementById('submenu').classList.add('hidden');
+      document.getElementById('logbook-submenu').classList.add('hidden');
+      document.getElementById('flight-package-submenu').classList.add('hidden');
+    }
+
+    function accessACMHook() {
+      fetch('https://hook.us2.make.com/da5idxtt84svxafvpqp2t6ue5ufiua2l')
+        .then(response => response.text())
+        .then(() => alert('ACM Hook Accessed Successfully!'))
+        .catch(error => alert('Failed to access ACM Hook: ' + error));
+    }
+    
+    function openHoursSheet() {
+      window.open(
+        'https://docs.google.com/spreadsheets/d/1aVR0E9VVneChtbmvKekyCDF3HK4oHnhsE0Sz6jE8QDE/edit?gid=1490807499#gid=1490807499',
+        '_blank'
+      );
+    }
+
+    function openMonthLogBook() {
+      window.open(
+        'https://docs.google.com/spreadsheets/d/1a2D2fXg212DDzZKffP3LBuv8etLQOz1Dx1VjwvHErp4/edit?gid=1616478695#gid=1616478695',
+        '_blank'
+      );
+    }
+
+    function openLogBook() {
+      window.open(
+        'https://docs.google.com/spreadsheets/d/1aEHVa4uFsvTyh-eYbB2W4z0ttDOXQvnY5odV-jB2Qsg/edit?gid=303169806#gid=303169806',
+        '_blank'
+      );
+    }
+    
+    // Placeholder function - keep if it's defined elsewhere
+    function accessTestMioHook2() {
+      // If this function is not defined in the original code, you might want to implement it
+      // or replace it with a proper implementation
+      alert('Full Report functionality accessed');
+    }
+  </script>
+</body>
+</html>
